@@ -59,6 +59,8 @@ jobs:
           {
               $env:GITHUB_RUNNER_ENVIRONMENT_NAME = az containerapp env list -g $env:AZURE_GROUP_DELIVERY --query [0].name -o tsv;
 
+              $cert = $env:GITHUB_RUNNER_KEY;
+
               az containerapp job create `
                   -n $env:APP_NAME `
                   -g $env:AZURE_GROUP_DELIVERY `
@@ -81,7 +83,7 @@ jobs:
                   --cpu $env:GITHUB_RUNNER_CPU `
                   --memory $env:GITHUB_RUNNER_MEMORY `
                   --polling-interval $env:GITHUB_RUNNER_POLLING_INTERVAL `
-                  --secrets "github-app-key-secret=$env:GITHUB_RUNNER_KEY" `
+                  --secrets "github-app-key-secret=$cert" `
                   --env-vars "APP_ID=$env:GITHUB_RUNNER_APP_ID" "APP_PRIVATE_KEY=secretref:github-app-key-secret" "APP_LOGIN=$env:GITHUB_RUNNER_OWNER" "RUNNER_SCOPE=org" "ORG_NAME=$env:GITHUB_RUNNER_OWNER" "EPHEMERAL=true" "DEBUG_OUTPUT=true" "RUNNER_LABELS=$env:GITHUB_RUNNER_ENV_LABEL";
           } 
           else 
